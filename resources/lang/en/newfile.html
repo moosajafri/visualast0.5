@@ -1,0 +1,80 @@
+<?php
+
+
+
+if(isset($_GET['folderName'])){
+	$dir=$_GET['folderName'];
+}
+$files = array();
+$filesAll = scandir($dir);
+foreach ($filesAll as $file) {
+	$fileOrFolder = filetype($dir."/".$file);
+	if($fileOrFolder=="file"){
+		$str=$file;
+		$extension=explode(".",$str);
+		$extension=$extension[1];
+		if($extension=="jpg" || $extension=="jpeg" || $extension=="png"){
+			array_push($files, $dir."/".$file);
+		}
+		
+	}
+}
+$overwrite=false;
+
+//$files= array("images2/t1.jpg", "images2/t2.jpg");
+
+
+$destination="success.zip";
+	if(file_exists($destination) && !$overwrite) {
+	 //return false;
+		
+
+
+
+
+		//echo 'file_exists($destination) && !$overwrite)';
+	 }
+	//vars
+	$valid_files = array();
+	//if files were passed in...
+	if(is_array($files)) {
+		//cycle through each file
+		foreach($files as $file) {
+			//make sure the file exists
+			if(file_exists($file)) {
+				$valid_files[] = $file;
+			}
+		}
+	}
+	//if we have good files...
+	if(count($valid_files)) {
+		//create the archive
+		$zip = new ZipArchive();
+		if($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
+			//echo '$zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true';
+			//return false;
+		}
+		//echo "<br><br> here ".$zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE)  ." here <br><br>";
+		$zip->addFile($valid_files[0],$valid_files[0]);
+		//add the files
+		//echo "<br> valid files: <br>";
+		//print_r($valid_files);
+		//debug
+		//echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
+		
+		//close the zip -- done!
+		$zip->close();
+		
+		//check to make sure the file exists
+		//return file_exists($destination);
+	}
+	else
+	{
+		//echo 'last else issue';
+		//return false;
+	}
+
+      //$downloadlink=$_SERVER['HTTP_HOST'];
+      $downloadlink=$destination;
+      	echo "zipped file created sucessfully. click <a href='".$downloadlink."'>here</a> to download";
+?>
