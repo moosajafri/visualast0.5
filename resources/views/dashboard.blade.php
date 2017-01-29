@@ -87,7 +87,30 @@
 
     @if($role=='member')
         <script type="text/javascript">
-            $( "#lead" ).click(function() {
+
+        function getInfoFlagAjax(){
+                $.ajax({
+                    url: "DAL/getInfoFlag?",
+                    type: 'GET',
+                    success: function(data) {
+                        if(data=="1"){
+                            $("#lead").prop("checked",true);
+                            }else{
+                            $("#lead").prop("checked",false);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert(xhr.responseText);
+                    }
+                });
+        }    
+
+        $(document).ready(function(){
+
+
+                getInfoFlagAjax();
+
+               $( "#lead" ).click(function() {
                 var paramaters = "value=" + $('#lead').is(':checked');
                 $.ajax({
                     url: "DAL/setInfoFlag?" + paramaters,
@@ -100,8 +123,6 @@
                     }
                 });
             });
-
-
             $.ajax({//sets unread messages as read on page load
                 url: "DAL/setMessagesRead",
                 type: 'GET',
@@ -110,8 +131,12 @@
                 error: function(xhr, status, error) {
                     alert(xhr.responseText);
                 }
-            });
-        </script>
+            });            
+        });
+
+
+
+    </script>
     @endif
 
     @if($role=='admin')

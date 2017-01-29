@@ -5,6 +5,8 @@
         .borderless td, .borderless th {
             border: none;
         }
+
+       
     </style>
 
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -19,6 +21,8 @@
                 getWorkExperienceAjax();
                 getEducationAjax();
                 getMyLinksAjax();
+                getSkillsAjax();
+                getInterestsAjax();
                 //$("#testbtn").click();
 //ADd your Ajax GET functions here!
 
@@ -51,8 +55,9 @@
                                 + "&startmonth=" + encodeURIComponent($("#workExperienceStartMonth").val())
                                 + "&startyear=" + encodeURIComponent($("#workExperienceStartYear").val());
                                 if( $("#chkBoxIsCurrent").attr("checked",true) ){
-                                      paramaters=paramaters   + "&endmonth="+ encodeURIComponent("-1")
-                                    + "&endyear=" + encodeURIComponent("-1");
+
+                                      paramaters=paramaters   + "&endmonth="+ encodeURIComponent("Is Current")
+                                    + "&endyear=" + encodeURIComponent("Is Current");
                                 }else{
                                     paramaters= paramaters+ "&endmonth="+ encodeURIComponent($("#workExperienceEndMonth").val())
                                     + "&endyear=" + encodeURIComponent($("#workExperienceEndYear").val());  
@@ -85,7 +90,7 @@
                                 }
                                 paramaters=paramaters + "&location=" + encodeURIComponent($("#workExperienceLocation").val())
                                 + "&summary=" + encodeURIComponent($("#workExperienceSummary").val());
-                        
+                        paramaters=paramaters+ "&id=" + $("#workExperienceAddOrEdit").val();
                         $.ajax({
                             url: "HomeController/editWorkExperience?" + paramaters,
                             type: 'GET',
@@ -140,9 +145,9 @@
                                 + "&endyear=" + $("#educationEndYear").val()
                                 + "&location=" + $("#educationLocation").val()
                                 + "&activities=" + $("#educationActivities").val();
-                        
+                                paramaters=paramaters+ "&id=" + $("#educationAddOrEdit").val();
                                 $.ajax({
-                                    url: "HomeController/editEducation?" + paramaters,
+                                    url: "HomeController/editEducation" + paramaters,
                                     type: 'GET',
                                     success: function(data) {
                                         getEducationAjax();
@@ -161,10 +166,10 @@
 
 //inserting My Link to DB
                 $("#btnSubmitMyLinks").click(function(event){
-
+                    
                     if($("#myLinksForm")[0].checkValidity()) {
              
-if($("#educationAddOrEdit").val()=="-1"){
+                        if($("#myLinkAddOrEdit").val()=="-1"){
                         var paramaters = "?category=" + $("#myLinksCategory").val()+"&url=" + $("#myLinksURL").val();
                         $.ajax({
                             url: "HomeController/insertMyLinks" + paramaters,
@@ -178,6 +183,7 @@ if($("#educationAddOrEdit").val()=="-1"){
                         });
                         }else{
                               var paramaters = "?category=" + $("#myLinksCategory").val()+"&url=" + $("#myLinksURL").val();
+                              paramaters=paramaters+ "&id=" + $("#myLinkAddOrEdit").val();
                                                 $.ajax({
                                                     url: "HomeController/editMyLink" + paramaters,
                                                     type: 'GET',
@@ -197,22 +203,38 @@ if($("#educationAddOrEdit").val()=="-1"){
 
 //inserting Skills in DB
                 $("#btnSubmitSkills").click(function(event){
-
-                    if($("#skillsForm")[0].checkValidity()) {
-
-                        //your form execution code
-                        var paramaters = "?skill=" + $("#skillsSkill").val()
-                                +"&years=" + $("#skillsYears").val()
-                                +"&proficiency=" + $("#skillsProficiency").val();
-                        $.ajax({
-                            url: "HomeController/insertSkills" + paramaters,
-                            type: 'GET',
-                            success: function(data) {
-                                getSkillsAjax();
-                            },
-                            error: function(xhr, status, error) {
-                            }
-                        });
+                        if($("#skillsForm")[0].checkValidity()) {
+                            if($("#skillAddOrEdit").val()=="-1"){
+                            //your form execution code
+                            var paramaters = "?skill=" + $("#skillsSkill").val()
+                                    +"&years=" + $("#skillsYears").val()
+                                    +"&proficiency=" + $("#skillsProficiency").val();
+                            $.ajax({
+                                url: "HomeController/insertSkills" + paramaters,
+                                type: 'GET',
+                                success: function(data) {
+                                    getSkillsAjax();
+                                },
+                                error: function(xhr, status, error) {
+                                }
+                            });
+                        }else{
+                            //your form execution code
+                            var paramaters = "?skill=" + $("#skillsSkill").val()
+                                    +"&years=" + $("#skillsYears").val()
+                                    +"&proficiency=" + $("#skillsProficiency").val();
+                                    paramaters=paramaters+ "&id=" + $("#skillAddOrEdit").val(); 
+                            $.ajax({
+                                url: "HomeController/editSkill" + paramaters,
+                                type: 'GET',
+                                success: function(data) {
+                                    getSkillsAjax();
+                                },
+                                error: function(xhr, status, error) {
+                                }
+                            });
+                        }    
+                        
                     }else{
                         console.log("invalid form");
                         alert("Missing/ Wrong information, please correct.");
@@ -223,11 +245,11 @@ if($("#educationAddOrEdit").val()=="-1"){
                 $("#btnSubmitInterests").click(function(event){
 
                     if($("#interestsForm")[0].checkValidity()) {
-
-                        //your form execution code
-                        var paramaters = "?interest=" + $("#interestsInterest").val()
-                                +"&levelofinterest=" + $("#interestsLevelOfInterest").val();
-                        $.ajax({
+                        if($("#interestAddOrEdit").val()=="-1"){
+                            //your form execution code
+                            var paramaters = "?interest=" + $("#interestsInterest").val()
+                            +"&levelofinterest=" + $("#interestsLevelOfInterest").val();
+                            $.ajax({
                             url: "HomeController/insertInterests" + paramaters,
                             type: 'GET',
                             success: function(data) {
@@ -236,7 +258,24 @@ if($("#educationAddOrEdit").val()=="-1"){
                             },
                             error: function(xhr, status, error) {
                             }
-                        });
+                            }); 
+                        }else{
+                            //your form execution code
+                            var paramaters = "?interest=" + $("#interestsInterest").val()
+                            +"&levelofinterest=" + $("#interestsLevelOfInterest").val();
+                            paramaters=paramaters + "&id=" + $("#interestAddOrEdit").val();
+                            $.ajax({
+                            url: "HomeController/editInterest" + paramaters,
+                            type: 'GET',
+                            success: function(data) {
+                                //alert("success" + data.status);
+                                getInterestsAjax();
+                            },
+                            error: function(xhr, status, error) {
+                            }
+                            });
+                        }
+
                     }else{
                         console.log("invalid form");
                         alert("Missing/ Wrong information, please correct.");
@@ -367,7 +406,7 @@ if($("#educationAddOrEdit").val()=="-1"){
 
            function addNewMyLink(){
                 $("#btnSubmitMyLinks").html("Add");
-                $("#myLinksAddOrEdit").val("-1");
+                $("#myLinkAddOrEdit").val("-1");
                 $("#myLinksForm")[0].reset();
                 show(myLinksForm);
                 $('#myLinks').animate({ scrollTop: 0 }, 'slow');
@@ -375,7 +414,25 @@ if($("#educationAddOrEdit").val()=="-1"){
                 $('#myLinksForm input:text:visible:first').focus();
             }
 
+            function addNewSkill(){
+                $("#btnSubmitSkills").html("Add");
+                $("#skillAddOrEdit").val("-1");
+                $("#skillsForm")[0].reset();
+                show(skillsForm);
+                $('#skills').animate({ scrollTop: 0 }, 'slow');
+                //$('#workExperienceForm:third *:input[type!=hidden]:third').focus();
+                $('#skillsForm input:text:visible:first').focus();
+            }
 
+            function addNewInterest(){
+                $("#btnSubmitInterests").html("Add");
+                $("#interestAddOrEdit").val("-1");
+                $("#interestsForm")[0].reset();
+                show(interestsForm);
+                $('#interests').animate({ scrollTop: 0 }, 'slow');
+                $('#interestsForm input:text:visible:first').focus();
+            }
+            
 
             function chkboxIsCurentClick(obj){
                 if(obj.checked) {
@@ -506,8 +563,8 @@ if($("#educationAddOrEdit").val()=="-1"){
                 });
             }
 
-            //delete Skills
-            function deleteSkillsAjax(exp_id){
+            //delete Skill
+            function deleteSkillAjax(exp_id){
                 var id=exp_id;
                 var paramaters = "id=" + id;
                 $.ajax({
@@ -525,12 +582,12 @@ if($("#educationAddOrEdit").val()=="-1"){
                 });
             }
 
-            //delete Interests
-            function deleteInterestsAjax(exp_id){
+            //delete Interest
+            function deleteInterestAjax(exp_id){
                 var id=exp_id;
                 var paramaters = "id=" + id;
                 $.ajax({
-                    url: "HomeController/deleteInterests?" + paramaters,
+                    url: "HomeController/deleteInterest?" + paramaters,
                     type: 'GET',
                     success: function(data) {
 
@@ -639,7 +696,7 @@ if($("#educationAddOrEdit").val()=="-1"){
                         $("#educationEndYear").val(data[0].endyear);
                         $("#educationLocation").val(data[0].location);
                         $("#educationActivities").val(data[0].activities);
-
+                        $("#educationAddOrEdit").val(data[0].id);
                         if(data[0].endmonth!= undefined){
                                 if(data[0].endmonth == "-1"){
                                     $('#chkBoxIsCurrent').prop('checked', true);
@@ -675,6 +732,7 @@ function editMyLinkPopulateForm(exp_id){
                         show(myLinksForm);
                         $('#myLinksForm input:text:visible:first').focus();
                         $("#btnSubmitMyLinks").html("Update");
+                        $("#myLinkAddOrEdit").val(data[0].id);
                     },
                     error: function(xhr, status, error) {
                         //alert(xhr.responseText);
@@ -683,6 +741,48 @@ function editMyLinkPopulateForm(exp_id){
             }
 
 
+function editSkillPopulateForm(exp_id){
+    var id=exp_id;
+                var paramaters = "id=" + id;
+                $.ajax({
+                    url: "HomeController/editSkillPopulateForm?" + paramaters,
+                    type: 'GET',
+                    success: function(data) {
+                        //load data in modal.
+                        $("#skillsSkill").val(data[0].skill);
+                        $("#skillsYears").val(data[0].years);
+                        $("#skillsProficiency").val(data[0].proficiency);
+                        show(skillsForm);
+                        $('#skillsForm input:text:visible:first').focus();
+                        $("#btnSubmitSkills").html("Update");
+                        $("#skillAddOrEdit").val(data[0].id);
+                    },
+                    error: function(xhr, status, error) {
+                        
+                    }
+                });
+}
+
+function editInterestPopulateForm(exp_id){
+    var id=exp_id;
+                var paramaters = "id=" + id;
+                $.ajax({
+                    url: "HomeController/editInterestPopulateForm?" + paramaters,
+                    type: 'GET',
+                    success: function(data) {
+                        //load data in modal.
+                        $("#interestsInterest").val(data[0].interest);
+                        $("#interestsLevelOfInterest").val(data[0].levelofinterest);
+                        show(interestsForm);
+                        $('#interestsForm input:text:visible:first').focus();
+                        $("#btnSubmitInterests").html("Update");
+                        $("#interestAddOrEdit").val(data[0].id);
+                    },
+                    error: function(xhr, status, error) {
+                        
+                    }
+                });
+}
 
 
 
@@ -920,6 +1020,95 @@ function editMyLinkPopulateForm(exp_id){
                 }
 
 
+function getSkillsAjax(){
+    var paramaters="";
+    $.ajax({
+        url: "HomeController/getSkills?" + paramaters,
+        type: 'GET',
+        success: function(data) {
+            //Empty everything before repopulating
+            $("#skillsResumeTable").find('tbody').html(""); //TEmplate Div
+            $("#skillsModalTable").find('tbody').html(""); //Modal Div
+            var i=0;
+            for(i=0;i<data.length;i++){
+              var skill,years,proficiency;
+                if(data[i].skill!= undefined){
+                    skill=data[i].skill;
+                    }
+                if(data[i].years!= undefined){
+                    years=data[i].years;
+                }
+                if(data[i].proficiency!= undefined){
+                    proficiency=data[i].proficiency;
+                }
+                if(data[i].id!=undefined){
+                     //this is the Table population code present in modal.
+                        var rowToAppend= '<tr id="skill_'+data[i].id+'">'+
+                                '<td style="width:20%">'+ data[i].skill + ' : ' + data[i].proficiency +'</td>'+
+                                '<td style="width:20%" onclick=editSkillPopulateForm("'+data[i].id+'")><span class="glyphicon glyphicon-pencil"></span></td>'+
+                                '<td style="width:20%" onclick=deleteSkillAjax("'+data[i].id+'")><span class="glyphicon glyphicon-trash"></span></td></tr>';
+                        $("#skillsModalTable").find('tbody').prepend(rowToAppend);
+                    //To append in resume.
+                    var toAppendHTMLResume='<tr id=skill_'+data[i].id+'>'+
+                    '<td>'+skill+'</td>'+
+                    '<td>'+years+'</td>'+
+                    '<td>'+proficiency+'</td>'+
+                    '</tr>';
+                    $("#skillsResumeTable").find('tbody').prepend(toAppendHTMLResume);
+                    var toAppendHTMLModal = "";
+                }
+            }
+            $('#skills').animate({ scrollTop: 0 }, 'slow');
+        },
+        error: function(xhr, status, error) {
+            //alert(xhr.responseText);
+        }
+    });
+
+}
+
+function getInterestsAjax(){
+    var paramaters="";
+    $.ajax({
+        url: "HomeController/getInterests?" + paramaters,
+        type: 'GET',
+        success: function(data) {
+            //Empty everything before repopulating
+            $("#interestsResumeTable").find('tbody').html(""); //TEmplate Div
+            $("#interestsModalTable").find('tbody').html(""); //Modal Div
+            var i=0;
+            for(i=0;i<data.length;i++){
+              var interest,levelofinterest;
+                if(data[i].interest!= undefined){
+                    interest=data[i].interest;
+                    }
+                if(data[i].levelofinterest!= undefined){
+                    levelofinterest=data[i].levelofinterest;
+                }
+                
+                if(data[i].id!=undefined){
+                     //this is the Table population code present in modal.
+                        var rowToAppend= '<tr id="interest_'+data[i].id+'">'+
+                                '<td style="width:20%">'+ data[i].interest + ' : ' + data[i].levelofinterest +'</td>'+
+                                '<td style="width:20%" onclick=editInterestPopulateForm("'+data[i].id+'")><span class="glyphicon glyphicon-pencil"></span></td>'+
+                                '<td style="width:20%" onclick=deleteInterestAjax("'+data[i].id+'")><span class="glyphicon glyphicon-trash"></span></td></tr>';
+                        $("#interestsModalTable").find('tbody').prepend(rowToAppend);
+                    //To append in resume.
+                    var toAppendHTMLResume='<tr id=skill_'+data[i].id+'>'+
+                    '<td>'+interest+'</td>'+
+                    '<td>'+levelofinterest+'</td>'+
+                    '</tr>';
+                    $("#interestsResumeTable").find('tbody').prepend(toAppendHTMLResume);
+                    var toAppendHTMLModal = "";
+                }
+            }
+            $('#interest').animate({ scrollTop: 0 }, 'slow');
+        },
+        error: function(xhr, status, error) {
+            //alert(xhr.responseText);
+        }
+    })    
+}
             function setProfileSummary(){
 
                 var paramaters = "fname=" + $("#profileSummaryFirstName").val()
@@ -1094,7 +1283,7 @@ function editMyLinkPopulateForm(exp_id){
                         <input style="margin-right: 10px;" type="checkbox"><span>Languages<button data-toggle="modal" data-target="#languages" data-backdrop="static" style="height:40px;float: right" class="grad btn"><b style="color: black">Edit</b></button></span>
                     </div>
                 </li>
-                <li>
+                <li style="display:none">
                     <div>
                         <input style="margin-right: 10px;" type="checkbox"><span>Awards & Honors<button data-toggle="modal" data-target="#awardsAndHonors" data-backdrop="static" style="height:40px;float: right" class="grad btn"><b style="color: black">Edit</b></button></span>
                     </div>
@@ -1159,9 +1348,9 @@ function editMyLinkPopulateForm(exp_id){
                     <button style="float: right" onclick="downloadasimage()" class="btn btn-info center-block" id="dlimg">Download Resume As Image</button>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12" id="downloaddiv">
+                    <div class="col-lg-12" id="downloaddiv" style="background-image: url('/images/background.png');">
                         <!--theme starts here-->
-                        <div id="cv" class="instaFade">
+                        <div id="cv" class="instaFade" >
                             <div class="mainDetails">
                                 <div id="headshot" class="quickFade">
                                     <img    src="{!! URL::to('/images/moosa.jpg') !!}" alt="Display Photo" />
@@ -1221,20 +1410,26 @@ function editMyLinkPopulateForm(exp_id){
 
                                    <section>
                                     <div class="sectionTitle">
-                                        <h1>Key Skills</h1>
+                                        <h1>Skills</h1>
                                     </div>
 
                                     <div class="sectionContent" id="skillsDiv">
-                                        <ul class="keySkills">
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                            <li>A Key Skill</li>
-                                        </ul>
+                                    <article>
+                                        <div class="container" style="width:100%;" id="skillsResumeTable">
+                                            <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                            <th style="width:70%">Skill</th>
+                                            <th style="width:30%">Years </th>
+                                            <th style="width:30%">Proficiency </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                            </table>
+                                            </div>
+                                    </article>
+
                                     </div>
                                     <div class="clear"></div>
                                 </section>
@@ -1277,7 +1472,7 @@ function editMyLinkPopulateForm(exp_id){
                                     <div class="sectionContent" id="InterestsDiv">
                                         <article>
                                             <div class="container" style="width:100%;">
-                                                <table class="table table-hover">
+                                                <table class="table table-hover" id="interestsResumeTable">
                                                     <thead>
                                                     <tr>
                                                         <th style="width:70%">Interest</th>
@@ -1697,7 +1892,9 @@ function editMyLinkPopulateForm(exp_id){
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Skills</h4>
-                        <h5>Populate your viz with kickass skills. Maximum 5 skills are displayed.</h5>
+                        <h5>Populate your viz with kickass skills.</h5>
+                    <button onclick="addNewSkill()" class="btn">+ Add New</button>
+                        
                     </div>
                     <table class="table table-hover" id="skillsModalTable">
                         <thead>
@@ -1713,8 +1910,9 @@ function editMyLinkPopulateForm(exp_id){
                         </tbody>
                     </table>
                     <div class="modal-body">
-                        <button onclick="show(skillsForm)" class="btn">+ Add New</button>
                         <form style="display: none;" id="skillsForm">
+                            <button type="button" id="btnSubmitSkills" class="btn btn-default">Add</button>
+                            <button onclick="hide(skillsForm)" type="button" class="btn btn-default">Cancel</button>
                             <div class="form-group">
                                 <label class="small" for="skillsSkill">Skill: *</label>
                                 <input type="text" class="input-sm form-control" id="skillsSkill" required>
@@ -1755,8 +1953,7 @@ function editMyLinkPopulateForm(exp_id){
                                     <option>Expert</option>
                                 </select>
                             </div>
-                            <button type="button" id="btnSubmitSkills" class="btn btn-default">Add</button>
-                            <button onclick="hide(skillsForm)" type="button" class="btn btn-default">Cancel</button>
+
                         </form>
                     </div>
                 </div>
@@ -1771,7 +1968,8 @@ function editMyLinkPopulateForm(exp_id){
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Interests</h4>
-                        <h5>Add some interests to your viz. Maximum 6 interests are displayed.</h5>
+                        <h5>Add some interests to your viz.</h5>
+                    <button onclick="addNewInterest()" class="btn">+ Add New</button>
                     </div>
                     <table class="table table-hover" id="interestsModalTable">
                         <thead>
@@ -1787,8 +1985,9 @@ function editMyLinkPopulateForm(exp_id){
                         </tbody>
                     </table>
                     <div class="modal-body">
-                        <button onclick="show(interestsForm)" class="btn">+ Add New</button>
                         <form style="display: none;" id="interestsForm">
+                            <button type="button" id="btnSubmitInterests" class="btn btn-default">Add</button>
+                            <button onclick="hide(interestsForm)" type="button" class="btn btn-default">Cancel</button>
                             <div class="form-group">
                                 <label class="small" for="interestsInterest">Interest: *</label>
                                 <input type="text" class="input-sm form-control" id="interestsInterest" required>
@@ -1810,8 +2009,7 @@ function editMyLinkPopulateForm(exp_id){
                                 </select>
                                 <p class="small">10 is the highest.</p>
                             </div>
-                            <button type="button" id="btnSubmitInterests" class="btn btn-default">Add</button>
-                            <button onclick="hide(interestsForm)" type="button" class="btn btn-default">Cancel</button>
+                            
                         </form>
                     </div>
                 </div>
@@ -1869,7 +2067,7 @@ function editMyLinkPopulateForm(exp_id){
         <!-- LANGUAGES MODAL END -->
 
         <!-- AWARDS & HONORS MODAL START-->
-        <div id="awardsAndHonors" class="modal fade" role="dialog">
+        <div id="awardsAndHonors" class="modal fade" role="dialog" style="display:none">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

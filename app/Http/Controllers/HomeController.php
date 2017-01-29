@@ -209,6 +209,30 @@ class HomeController extends Controller
         //return response()->json($profilesummaryRS[0]);
     }
 
+    public function getSkills(Request $request){
+        $userid = Auth::id();
+
+        $skillsRS = Skill::where('userid', '=', $userid)->orderBy('id', 'desc')->get();
+        if( isset($skillsRS)){
+            return response()->json($skillsRS);
+        }else{
+            return "-1";
+        }
+        //return response()->json($profilesummaryRS[0]);
+    }    
+
+    public function getInterests(Request $request){
+        $userid = Auth::id();
+
+        $interestsRS = Interest::where('userid', '=', $userid)->orderBy('id', 'desc')->get();
+        if( isset($interestsRS)){
+            return response()->json($interestsRS);
+        }else{
+            return "-1";
+        }
+        //return response()->json($profilesummaryRS[0]);
+    }
+
     public function editWorkExperiencePopulateForm(Request $request){
         $userid = Auth::id();
         $Workexperience_id = $request["id"];
@@ -252,7 +276,36 @@ public function editMyLinkPopulateForm(Request $request){
     }
 
 
-     public function editWorkExperience(Request $request){
+public function editSkillPopulateForm(Request $request){
+        $userid = Auth::id();
+        $skill_id = $request["id"];
+        $skillsRS = DB::table('skills')->where([
+            ['userid', '=', $userid],
+            ['id', '=', $skill_id],
+        ])->get();
+        if( isset($skillsRS)){
+            return response()->json($skillsRS);    
+        }else{
+            return "-1";
+        }
+    }
+
+public function editInterestPopulateForm(Request $request){
+        $userid = Auth::id();
+        $interest_id = $request["id"];
+        $interestsRS = DB::table('interests')->where([
+            ['userid', '=', $userid],
+            ['id', '=', $interest_id],
+        ])->get();
+        if( isset($interestsRS)){
+            return response()->json($interestsRS);    
+        }else{
+            return "-1";
+        }
+    }    
+
+
+public function editWorkExperience(Request $request){
         $Workexperience = new Workexperience;
         $userid = Auth::id();
         
@@ -274,31 +327,70 @@ public function editMyLinkPopulateForm(Request $request){
  public function editEducation(Request $request){
         $education = new Education;
         $userid = Auth::id();
+        $school=$request["school"];
+        $degree=$request["degree"];
+        $programofstudy=$request["programofstudy"];
+        $startmonth=$request["startmonth"];
+        $startyear=$request["startyear"];
+        $endmonth=$request["endmonth"];
+        $endyear=$request["endyear"];
+        $location=$request["location"];
+        $activities=$request["activities"];
+        $id = $request["id"];
         
-
-$school=$request["school"];
-$degree=$request["degree"];
-$programofstudy=$request["programofstudy"];
-$startmonth=$request["startmonth"];
-$startyear=$request["startyear"];
-$endmonth=$request["endmonth"];
-$endyear=$request["endyear"];
-$location=$request["location"];
-$activities=$request["activities"];
-$id = $request["id"];
-        $Workexperience->where('id',$id)->where('userid',$userid)
+        return $education->where('id',$id)->where('userid',$userid)
         ->update(['school' => $school,
-'degree' => $degree,
-'programofstudy' => $programofstudy,
-'startmonth' => $startmonth,
-'startyear' => $startyear,
-'endmonth' => $endmonth,
-'endyear' => $endyear,
-'location' => $location,
-'activities' => $activities,
+        'degree' => $degree,
+        'programofstudy' => $programofstudy,
+        'startmonth' => $startmonth,
+        'startyear' => $startyear,
+        'endmonth' => $endmonth,
+        'endyear' => $endyear,
+        'location' => $location,
+        'activities' => $activities,
          ]);
-                
-    }
+
+
+}
+
+
+ public function editMyLink(Request $request){
+        $myLink = new Mylink;
+        $userid = Auth::id();
+        $category=$request["category"];
+        $url=$request["url"];
+        $id = $request["id"];
+        $myLink->where('id',$id)->where('userid',$userid)
+            ->update(['url' => $url,
+            'category' => $category,
+        ]);
+}
+
+ public function editSkill(Request $request){
+        $skill = new Skill;
+        $userid = Auth::id();
+        $myskill=$request["skill"];
+        $years=$request["years"];
+        $proficiency=$request["proficiency"];
+        $id = $request["id"];
+        $skill->where('id',$id)->where('userid',$userid)
+            ->update(['skill' => $myskill,
+            'years' => $years,
+            'proficiency' => $proficiency,
+        ]);
+}
+
+ public function editInterest(Request $request){
+        $interest = new Interest;
+        $userid = Auth::id();
+        $myinterest=$request["interest"];
+        $levelofinterest=$request["levelofinterest"];
+        $id = $request["id"];
+        $interest->where('id',$id)->where('userid',$userid)
+            ->update(['interest' => $myinterest,
+            'levelofinterest' => $levelofinterest,
+        ]);
+}
 
     public function deleteWorkExperience(Request $request){
         $userid = Auth::id();
@@ -360,10 +452,10 @@ $id = $request["id"];
         }
     }
 
-    public function deleteInterests(Request $request){
+    public function deleteInterest(Request $request){
         $userid = Auth::id();
         $Interests_id = $request["id"];
-        DB::table('interests')->where([
+        $interestsRS=DB::table('interests')->where([
             ['userid', '=', $userid],
             ['id', '=', $Interests_id],
         ])->delete();

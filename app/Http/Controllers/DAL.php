@@ -38,10 +38,18 @@ class DAL extends Controller
         if ($request["value"]=='true'){
             $option=true;
         }
-        DB::table('users')->where('id',AUTH::id())
+        $status=DB::table('users')->where('id',AUTH::id())
             ->update(['infoFlag'=>$option]);
-       return response()->json(['status' => "1" ]);
+       return response()->json(['status' => $status ]);
     }
+
+    public function getInfoFlag(Request $request){
+        $userid = Auth::id();
+        $infoFlagRS = $status=DB::table('users')->where('id',AUTH::id())->get();
+        
+        return $infoFlagRS[0]->infoFlag;
+    }
+
 
     public function sendMessageAll(Request $request){
         $message = $request["message"];

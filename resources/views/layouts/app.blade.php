@@ -111,8 +111,9 @@
 <!--Mandatory Hidden Fields for ALl resumes. -->
 <input type="hidden" id="workExperienceAddOrEdit" value="-1">
 <input type="hidden" id="educationAddOrEdit" value="-1">
-<input type="hidden" id="myLinksAddOrEdit" value="-1">
-
+<input type="hidden" id="myLinkAddOrEdit" value="-1">
+<input type="hidden" id="skillAddOrEdit" value="-1">
+<input type="hidden" id="interestAddOrEdit" value="-1">
 </body>
 </html>
 

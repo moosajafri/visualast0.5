@@ -51,9 +51,17 @@ Route::get('HomeController/editMyLink', 'HomeController@editMyLink');
 
 Route::get('HomeController/insertSkills', 'HomeController@insertSkills');
 Route::get('HomeController/deleteSkills', 'HomeController@deleteSkills');
+Route::get('HomeController/getSkills', 'HomeController@getSkills');
+Route::get('HomeController/editSkillPopulateForm', 'HomeController@editSkillPopulateForm');
+Route::get('HomeController/editSkill', 'HomeController@editSkill');
 
 Route::get('HomeController/insertInterests', 'HomeController@insertInterests');
-Route::get('HomeController/deleteInterest', 'HomeController@deleteInterests');
+Route::get('HomeController/deleteInterest', 'HomeController@deleteInterest');
+Route::get('HomeController/getInterests', 'HomeController@getInterests');
+Route::get('HomeController/editInterestPopulateForm', 'HomeController@editInterestPopulateForm');
+Route::get('HomeController/editInterest', 'HomeController@editInterest');
+
+
 
 Route::get('HomeController/insertLangauges', 'HomeController@insertLanguages');
 Route::get('HomeController/deleteLanguages', 'HomeController@deleteLanguages');
@@ -61,9 +69,10 @@ Route::get('HomeController/deleteLanguages', 'HomeController@deleteLanguages');
 Route::get('HomeController/insertAwardsAndHonors', 'HomeController@insertAwardsAndHonors');
 Route::get('HomeController/deleteAwardsAndHonors', 'HomeController@deleteAwardsAndHonors');
 
-Route::get('HomeController/setInfoFlag', 'HomeController@setInfoFlag');
-Route::get('HomeController/sendMessageAll', 'HomeController@sendMessageAll');
-Route::get('HomeController/setMessagesRead', 'HomeController@setMessagesRead');
+Route::get('DAL/setInfoFlag', 'DAL@setInfoFlag');
+Route::get('DAL/getInfoFlag', 'DAL@getInfoFlag');
+Route::get('DAL/sendMessageAll', 'DAL@sendMessageAll');
+Route::get('DAL/setMessagesRead', 'DAL@setMessagesRead');
 
 Route::get('/dashboard/viewLeads','ViewLeadsController@index');
 Route::get('/dashboard/showLead/{user_id}','ShowLeadController@index');
